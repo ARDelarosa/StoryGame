@@ -1,0 +1,38 @@
+-# Full-screen dark background and centered story card
+%div{ class: "min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center py-12" }
+  %div{ class: "max-w-2xl w-full mx-4" }
+    %div{ class: "bg-slate-900/80 rounded-2xl shadow-xl border border-slate-800 p-8 space-y-6" }
+
+      / Header
+      %div{ class: "flex items-baseline justify-between gap-4" }
+        %h1{ class: "text-3xl font-semibold tracking-tight" }= @node.title
+        %span{ class: "text-xs uppercase tracking-widest text-slate-400" }
+          Single-player story
+
+      / Story body text
+      %div{ class: "story-body text-slate-200 leading-relaxed" }
+        = simple_format(@node.body)
+
+      - if @node.choices.any?
+        %div{ class: "mt-6" }
+          %h2{ class: "text-sm font-semibold text-slate-400 mb-3" } What do you do?
+
+          / Choices as big clickable buttons
+          %div{ class: "grid gap-3" }
+            - @node.choices.each do |choice|
+              - if choice.next_story_node
+                = link_to story_node_path(choice.next_story_node_id),
+                  class: "block w-full text-left px-4 py-3 rounded-xl border border-slate-700/80 hover:border-sky-400 hover:bg-slate-900/80 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950" do
+                  %span{ class: "text-sm font-medium" }= choice.text
+              - else
+                %p{ class: "text-sm text-slate-500" }= choice.text
+      - else
+        / Ending screen
+        %div{ class: "mt-6 space-y-4" }
+          %h2{ class: "text-lg font-semibold text-emerald-400" } The End
+          %p{ class: "text-sm text-slate-300" }
+            Thanks for playing. Want to try a different path?
+
+          = link_to "Restart the story",
+            root_path,
+            class: "inline-flex items-center px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-semibold text-slate-900 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"

@@ -1,0 +1,24 @@
+%div{ class: "min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center py-12" }
+  %div{ class: "max-w-xl w-full mx-4" }
+    %div{ class: "bg-slate-900/80 rounded-2xl shadow-xl border border-slate-800 p-8 space-y-6" }
+
+      %div{ class: "space-y-2" }
+        %h1{ class: "text-4xl font-bold tracking-tight" } Story Game
+        %p{ class: "text-xs uppercase tracking-[0.2em] text-sky-400" }
+          Single-player interactive story
+
+      %div{ class: "text-slate-200 leading-relaxed space-y-2" }
+        %p
+          | You find yourself at the beginning of a winding tale with uncertain endings.
+        %p.text-sm.text-slate-400
+          | Your choices will shape what happens next.
+
+      - if @start_node
+        %div{ class: "mt-4" }
+          = link_to "Start game",
+            story_node_path(@start_node),
+            class: "inline-flex items-center px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-semibold text-slate-900 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+      - else
+        %p{ class: "text-sm text-red-300 mt-4" }
+          No story nodes found. Please run the seeds with
+          %code bin/rails db:seed

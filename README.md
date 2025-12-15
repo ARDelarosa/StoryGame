@@ -22,4 +22,4 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
-This is a single player interactive story game
+This is a single player interactive story game.
