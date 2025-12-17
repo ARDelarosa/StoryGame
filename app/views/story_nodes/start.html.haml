@@ -13,12 +13,33 @@
         %p.text-sm.text-slate-400
           | Your choices will shape what happens next.
 
-      - if @start_node
-        %div{ class: "mt-4" }
-          = link_to "Start game",
-            story_node_path(@start_node),
-            class: "inline-flex items-center px-6 py-3 rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-semibold text-slate-900 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"
-      - else
-        %p{ class: "text-sm text-red-300 mt-4" }
-          No story nodes found. Please run the seeds with
-          %code bin/rails db:seed
+      / Start new game form (asks for name)
+      %div{ class: "mt-6 border-t border-slate-800 pt-4 space-y-4" }
+        %h2{ class: "text-sm font-semibold text-slate-300" } Start a new game
+
+        = form_with url: start_game_path, method: :post, local: true do |f|
+          %div{ class: "space-y-2" }
+            %label{ class: "block text-xs font-medium text-slate-400" }
+              Player name
+            = f.text_field :player_name,
+              value: @player_name,
+              placeholder: "Traveler",
+              class: "w-full rounded-md bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+
+          %div{ class: "mt-3" }
+            = f.submit "Start game",
+              class: "inline-flex items-center px-6 py-2.5 rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-semibold text-slate-900 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+
+      - if @can_continue
+        %div{ class: "mt-6 border-t border-slate-800 pt-4 space-y-3" }
+          %h2{ class: "text-sm font-semibold text-slate-300" } Continue
+
+          %p{ class: "text-xs text-slate-400" }
+            - if @player_name.present?
+              = "Last played as #{@player_name}."
+            - else
+              | Last game in progress.
+
+          = link_to "Continue game",
+            story_node_path(session[:current_node_id]),
+            class: "inline-flex items-center px-4 py-2 rounded-full border border-slate-700 hover:border-sky-400 hover:bg-slate-900/80 text-xs font-medium text-slate-100 transition focus:outline-none focus:ring focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-slate-950"

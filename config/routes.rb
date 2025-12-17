@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   root "story_nodes#start"          # Start screen
+
+  post "start_game", to: "story_nodes#start_game", as: :start_game
+  
   resources :story_nodes, only: :show
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

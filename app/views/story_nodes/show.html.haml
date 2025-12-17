@@ -1,23 +1,42 @@
--# Full-screen dark background and centered story card
 %div{ class: "min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center py-12" }
   %div{ class: "max-w-2xl w-full mx-4" }
     %div{ class: "bg-slate-900/80 rounded-2xl shadow-xl border border-slate-800 p-8 space-y-6" }
 
-      / Header
-      %div{ class: "flex items-baseline justify-between gap-4" }
-        %h1{ class: "text-3xl font-semibold tracking-tight" }= @node.title
-        %span{ class: "text-xs uppercase tracking-widest text-slate-400" }
-          Single-player story
+      / Header + player info
+      %div{ class: "flex items-start justify-between gap-4" }
+        %div
+          %h1{ class: "text-3xl font-semibold tracking-tight" }= @node.title
+          - if @player_name.present?
+            %p{ class: "text-xs text-slate-400 mt-1" }
+              = "Player: #{@player_name}"
+        %div{ class: "text-xs text-slate-300 space-y-1 text-right" }
+          %div
+            %span{ class: "font-semibold text-slate-100" } Health:
+            %span{ class: "text-emerald-400" }= @stats["health"]
+          %div
+            %span{ class: "font-semibold text-slate-100" } Gold:
+            %span{ class: "text-yellow-300" }= @stats["gold"]
+
+      / Inventory bar
+      %div{ class: "text-xs text-slate-300 bg-slate-950/60 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-3" }
+        %span.font-semibold.text-slate-200 Inventory
+        - if @inventory.present?
+          %div{ class: "flex flex-wrap gap-1" }
+            - @inventory.each do |item|
+              %span{ class: "inline-flex items-center px-2 py-0.5 rounded-full bg-slate-800 text-[11px]" }
+                = item
+        - else
+          %span.text-slate-500
+            | (empty)
 
       / Story body text
-      %div{ class: "story-body text-slate-200 leading-relaxed" }
-        = simple_format(@node.body)
+      %div{ class: "story-body text-slate-200 leading-relaxed mt-2" }
+        = simple_format(@rendered_body)
 
       - if @node.choices.any?
         %div{ class: "mt-6" }
           %h2{ class: "text-sm font-semibold text-slate-400 mb-3" } What do you do?
 
-          / Choices as big clickable buttons
           %div{ class: "grid gap-3" }
             - @node.choices.each do |choice|
               - if choice.next_story_node
@@ -27,7 +46,6 @@
               - else
                 %p{ class: "text-sm text-slate-500" }= choice.text
       - else
-        / Ending screen
         %div{ class: "mt-6 space-y-4" }
           %h2{ class: "text-lg font-semibold text-emerald-400" } The End
           %p{ class: "text-sm text-slate-300" }

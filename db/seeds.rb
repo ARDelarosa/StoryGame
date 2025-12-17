@@ -14,7 +14,7 @@ StoryNode.delete_all
 # Create nodes
 start = StoryNode.create!(
   title: "At the Crossroads",
-  body:  "You stand at a lonely crossroads at dusk. The forest looms to the north and a small village lies to the east."
+  body:  "{{name}}, stand at a lonely crossroads at dusk. The forest looms to the north and a small village lies to the east."
 )
 
 forest = StoryNode.create!(
